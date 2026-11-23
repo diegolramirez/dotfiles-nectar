@@ -1,0 +1,13 @@
+{
+  "claudeCode.hideOnboarding": true,
+  "claudeCode.preferredLocation": "panel",
+  "cSpell.userWords": [
+    "airflowignore",
+    "dagrun",
+    "dags",
+    "Ramírez",
+    "taskinstance",
+    "xcom"
+  ],
+  "terminal.integrated.fontSize": 13
+}

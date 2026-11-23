@@ -1,0 +1,11 @@
+{
+  "providerInstances": {
+    "claudeAgent": {
+      "config": {
+        "idleCompaction": "beforeCacheExpires"
+      },
+      "driver": "claudeAgent",
+      "enabled": true
+    }
+  }
+}
