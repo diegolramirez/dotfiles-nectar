@@ -6,7 +6,7 @@ description: Use when Diego Ramirez asks for his Pipes weekly stand-up report, w
 # Pipes weekly stand-up report
 
 Collect everything Diego Ramirez worked on since the last Pipes weekly stand-up from three sources, GitHub, ClickUp and
-the local plans, and relate them to each other. Then write one markdown report and save it under `plans/` (absolute path `/Users/diegor-nectar/Developer/repos/pipes/datasource_pipelines/plans`).
+the local plans, and relate them to each other. Then write one markdown report and save it under `plans/` (`~/Developer/repos/pipes/datasource_pipelines/plans`).
 The stand-up is every **Thursday at 08:30 America/Los_Angeles**.
 
 This skill only reads. It never changes ClickUp statuses, moves plans or posts comments. Mismatches go in the
@@ -17,7 +17,7 @@ report as suggestions, and the reply offers to apply them.
 ```bash
 command -v gh >/dev/null 2>&1 && echo "gh installed: ok" || echo "gh installed: MISSING"
 gh auth status >/dev/null 2>&1 && echo "gh auth:      ok" || echo "gh auth:      FAILED"
-PLANS=/Users/diegor-nectar/Developer/repos/pipes/datasource_pipelines/plans
+PLANS="$HOME/Developer/repos/pipes/datasource_pipelines/plans"
 test -d "$PLANS" && echo "plans dir:    ok" || echo "plans dir:    MISSING"
 ```
 
