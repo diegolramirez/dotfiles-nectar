@@ -110,8 +110,8 @@ Updated <YYYY-MM-DD HH:MM UTC>. <phase and next action>
 
 - [ ] CI of #<pr> green (all required checks, `Require Release Branch For Main` included).
 - [ ] Approval.
-- [ ] CodeRabbit on #<pr> read; real issues fixed or ticketed, the rest declined in their threads. Do this now: once
-      the PR is merged, nobody comments on it.
+- [ ] CodeRabbit on #<pr>: findings collected and triaged, follow-up ticket [ID-<n>](<url>) opened with all of them,
+      every thread answered and resolved (see "CodeRabbit review of the release PR").
 - [ ] Release PR link posted on every ticket it ships (`Here is the link to the PR into main (prod release):`, the
       full URL as text; skip tickets that already have it; `ENG-*` reported as not posted).
 - [ ] <decisions Diego has to take before merging, one line each>
@@ -165,6 +165,27 @@ Updated <YYYY-MM-DD HH:MM UTC>. <phase and next action>
 Fill every `<…>`. Drop a bullet that doesn't apply instead of writing "n/a". Each check says what passing looks
 like, so it can be ticked without judgement.
 
+## CodeRabbit review of the release PR
+
+Run this as soon as CodeRabbit has reviewed the release PR.
+
+1. **Collect** every finding: the inline threads (`gh api repos/iDerive-com/datasource_pipelines/pulls/<pr>/comments`,
+   top-level comments only), and the outside-diff items and nitpicks in the review body
+   (`gh api repos/iDerive-com/datasource_pipelines/pulls/<pr>/reviews`).
+2. **Triage** each one against the code on the release branch: relevant (a real bug or a doc/name that is wrong, to
+   fix in a PR into `dev`) or discarded (can't happen in Pipes, or churn), with a one-line reason. Note the dev PR it
+   came from.
+3. **Open one follow-up ticket** in the Pipes list (`901417632447`), assigned to Diego, named
+   `Release #<pr> CodeRabbit follow-ups`. The description holds every finding, discarded ones included for reference:
+   a "To do" section (numbered; file and line, the problem, the fix, the thread link, the shipped ticket it came from)
+   and a "Declined (for reference)" section (each with its thread link, or "review body", and the reason). Link it
+   "related" to the shipped tickets the findings came from (`clickup_add_task_link`). Save the ticket text as
+   `plans/todo/ID-<n>/ID-<n>_ticket.md`, and add its link to this file's "Before the merge" item.
+4. **Answer and resolve every inline thread**: reply in the thread (`pulls/comments/<id>/replies`, never a top-level
+   PR comment), tag `@coderabbitai`, and link the ticket, e.g. "@coderabbitai This will be handled in the follow-up
+   ticket [ID-<n>](<url>)." For a discarded finding, add that it is declined there and the one-line reason. Then
+   resolve the thread (GraphQL `resolveReviewThread`). Review-body items have no thread: they are only in the ticket.
+
 ## Step 3: Run a phase
 
 When Diego says the PR is merged, the deploy is done, or asks to run or resume a phase: run all of that phase's items,
@@ -206,7 +227,7 @@ each ticket's outcome, and move the directory to `plans/done/`.
 | Leaving a finished ticket in `wip/` until the release closes | Close it as soon as its last task is ticked. |
 | Pulling in plan tasks that don't wait on this release | Leave them in the plan. |
 | Logging a new problem found along the way as a release item | One pointer line; the work goes in a ticket's plan or a new ticket. |
-| Answering CodeRabbit after the merge | Before the merge; never comment on a merged PR. |
+| Listing CodeRabbit's findings in this file and stopping there | Collect, triage, open the follow-up ticket with all of them, answer and resolve every thread. |
 | Checking the host by hand instead of `check_host_health.sh` | Run the script and record its `RESULT:` line, plus the deploy-specific checks. |
 | Taking prod's SHA from `origin/main` | Read it on the host. |
 | Forgetting the `-large` Lambda | Both functions, every time. |
